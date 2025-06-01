@@ -1,0 +1,2 @@
+Selecting KMeans Model: 5
+Selecting BisectingKMeans Model: 3
