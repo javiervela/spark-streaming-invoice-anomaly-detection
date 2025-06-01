@@ -11,18 +11,17 @@ import org.apache.spark.sql.functions._
 
 import scala.collection.mutable.ArrayBuffer
 
-/**
-  * Created by root on 3/12/17.
+/** Created by root on 3/12/17.
   */
 object Clustering {
-  /**
-    * Load data from file, parse the data and normalize the data.
+
+  /** Load data from file, parse the data and normalize the data.
     */
-  def loadData(sc: SparkContext, file : String) : DataFrame = {
+  def loadData(sc: SparkContext, file: String): DataFrame = {
     val sqlContext = new SQLContext(sc)
 
     // Function to extract the hour from the date string
-    val gethour =  udf[Double, String]((date : String) => {
+    val gethour = udf[Double, String]((date: String) => {
       var out = -1.0
       if (!StringUtils.isEmpty(date)) {
         val hour = date.substring(10).split(":")(0)
@@ -43,19 +42,27 @@ object Clustering {
     df
   }
 
-  def featurizeData(df : DataFrame) : DataFrame = {
-   // TODO : Featurize the data
+  def featurizeData(df: DataFrame): DataFrame = {
+    // TODO : Featurize the data
     df
   }
 
-  def filterData(df : DataFrame) : DataFrame = {
-   // TODO: Filter cancelations and invalid
+  def filterData(df: DataFrame): DataFrame = {
+    // TODO: Filter cancelations and invalid
     df
   }
 
   def toDataset(df: DataFrame): RDD[Vector] = {
-    val data = df.select("AvgUnitPrice", "MinUnitPrice", "MaxUnitPrice", "Time", "NumberItems").rdd
-      .map(row =>{
+    val data = df
+      .select(
+        "AvgUnitPrice",
+        "MinUnitPrice",
+        "MaxUnitPrice",
+        "Time",
+        "NumberItems"
+      )
+      .rdd
+      .map(row => {
         val buffer = ArrayBuffer[Double]()
         buffer.append(row.getAs("AvgUnitPrice"))
         buffer.append(row.getAs("MinUnitPrice"))
@@ -69,12 +76,14 @@ object Clustering {
     data
   }
 
-  def elbowSelection(costs: Seq[Double], ratio : Double): Int = {
-    // TODO: Select the best model
-    0
+  def elbowSelection(costs: Seq[Double], ratio: Double): Int = {
+    for (i <- 1 until costs.length) {
+      if (costs(i) / costs(i - 1) > ratio) return i
+    }
+    costs.length - 1
   }
 
-  def saveThreshold(threshold : Double, fileName : String) = {
+  def saveThreshold(threshold: Double, fileName: String) = {
     val file = new File(fileName)
     val bw = new BufferedWriter(new FileWriter(file))
     // decide threshold for anomalies

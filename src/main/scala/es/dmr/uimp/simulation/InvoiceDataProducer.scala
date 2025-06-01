@@ -17,8 +17,14 @@ object InvoiceDataProducer extends App {
   val props = new Properties()
   props.put("bootstrap.servers", brokers)
   props.put("client.id", "ScalaProducerExample")
-  props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-  props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
+  props.put(
+    "key.serializer",
+    "org.apache.kafka.common.serialization.StringSerializer"
+  )
+  props.put(
+    "value.serializer",
+    "org.apache.kafka.common.serialization.StringSerializer"
+  )
   val producer = new KafkaProducer[String, String](props)
   val t = System.currentTimeMillis()
 
@@ -32,7 +38,7 @@ object InvoiceDataProducer extends App {
     producer.send(data)
 
     // Introduce random delay
-    Thread.sleep(5 +  (5*Random.nextFloat()).toInt)
+    Thread.sleep(5 + (5 * Random.nextFloat()).toInt)
   }
 
   producer.close()

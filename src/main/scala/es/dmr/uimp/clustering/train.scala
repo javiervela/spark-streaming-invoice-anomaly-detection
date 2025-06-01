@@ -18,7 +18,7 @@ object KMeansClusterInvoices {
     // load data
     val df = loadData(sc, args(0))
 
-   // Very simple feature extraction from an invoice
+    // Very simple feature extraction from an invoice
     val featurized = featurizeData(df)
 
     // Filter not valid entries
@@ -39,14 +39,16 @@ object KMeansClusterInvoices {
 
     // Save threshold
     val distances = dataset.map(d => distToCentroid(d, model))
-    val threshold = distances.top(2000).last // set the last of the furthest 2000 data points as the threshold
+    val threshold =
+      distances
+        .top(2000)
+        .last // set the last of the furthest 2000 data points as the threshold
 
     saveThreshold(threshold, args(2))
   }
 
-  /**
-   * Train a KMean model using invoice data.
-   */
+  /** Train a KMean model using invoice data.
+    */
   def trainModel(data: RDD[Vector]): KMeansModel = {
 
     val models = 1 to 20 map { k =>
@@ -62,13 +64,12 @@ object KMeansClusterInvoices {
     models(selected)
   }
 
-  /**
-   * Calculate distance between data point to centroid.
-   */
-  def distToCentroid(datum: Vector, model: KMeansModel) : Double = {
-    val centroid = model.clusterCenters(model.predict(datum)) // if more than 1 center
+  /** Calculate distance between data point to centroid.
+    */
+  def distToCentroid(datum: Vector, model: KMeansModel): Double = {
+    val centroid =
+      model.clusterCenters(model.predict(datum)) // if more than 1 center
     Vectors.sqdist(datum, centroid)
   }
 
 }
-
