@@ -43,12 +43,27 @@ object Clustering {
   }
 
   def featurizeData(df: DataFrame): DataFrame = {
-    // TODO : Featurize the data
+    val df = df
+      .groupBy("InvoiceNo")
+      .agg(
+        avg("UnitPrice").alias("AvgUnitPrice"),
+        min("UnitPrice").alias("MinUnitPrice"),
+        max("UnitPrice").alias("MaxUnitPrice"),
+        max("Hour").alias("Time"), // use last hour seen for the invoice
+        sum("Quantity").alias("NumberItems"),
+        max("InvoiceDate").alias("LastDate"),
+        count("*").alias("LineCount"),
+        first("CustomerID").alias("CustomerID") // Needed for later filtering
+      )
     df
   }
 
   def filterData(df: DataFrame): DataFrame = {
-    // TODO: Filter cancelations and invalid
+    val df = df.filter(
+      col("CustomerID").isNotNull &&
+        col("LastDate").isNotNull &&
+        !col("InvoiceNo").startsWith("C")
+    )
     df
   }
 

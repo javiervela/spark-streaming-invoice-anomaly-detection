@@ -1,6 +1,6 @@
 package es.dmr.uimp.clustering
 
-import es.dmr.uimp.clustering.Clustering.elbowSelection
+import es.dmr.uimp.clustering.Clustering._
 import org.apache.spark.mllib.clustering._
 import org.apache.spark.mllib.linalg.{Vector, Vectors}
 import org.apache.spark.rdd.RDD
@@ -12,7 +12,7 @@ object KMeansClusterInvoices {
 
     import Clustering._
 
-    val sparkConf = new SparkConf().setAppName("ClusterInvoices")
+    val sparkConf = new SparkConf().setAppName("KMeansClusterInvoices")
     val sc = new SparkContext(sparkConf)
 
     // load data
@@ -52,15 +52,15 @@ object KMeansClusterInvoices {
   def trainModel(data: RDD[Vector]): KMeansModel = {
 
     val models = 1 to 20 map { k =>
-      val kmeans = new KMeans()
-      kmeans.setK(k) // find that one center
-      kmeans.run(data)
+      val model = new KMeans()
+      model.setK(k) // find that one center
+      model.run(data)
     }
 
     val costs = models.map(model => model.computeCost(data))
 
     val selected = elbowSelection(costs, 0.7)
-    System.out.println("Selecting model: " + models(selected).k)
+    System.out.println("Selecting KMeans Model: " + models(selected).k)
     models(selected)
   }
 
