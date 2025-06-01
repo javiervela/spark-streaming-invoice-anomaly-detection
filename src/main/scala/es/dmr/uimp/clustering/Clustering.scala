@@ -43,8 +43,7 @@ object Clustering {
   }
 
   def featurizeData(df: DataFrame): DataFrame = {
-    val df = df
-      .groupBy("InvoiceNo")
+    val result = df.groupBy("InvoiceNo")
       .agg(
         avg("UnitPrice").alias("AvgUnitPrice"),
         min("UnitPrice").alias("MinUnitPrice"),
@@ -55,16 +54,16 @@ object Clustering {
         count("*").alias("LineCount"),
         first("CustomerID").alias("CustomerID") // Needed for later filtering
       )
-    df
+    result
   }
 
   def filterData(df: DataFrame): DataFrame = {
-    val df = df.filter(
+    val result = df.filter(
       col("CustomerID").isNotNull &&
         col("LastDate").isNotNull &&
         !col("InvoiceNo").startsWith("C")
     )
-    df
+    result
   }
 
   def toDataset(df: DataFrame): RDD[Vector] = {

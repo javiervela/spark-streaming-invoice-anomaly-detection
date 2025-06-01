@@ -15,15 +15,18 @@ object BisectingKMeansClusterInvoices {
     val sparkConf =
       new SparkConf().setAppName(" BisectingKMeansClusterInvoices")
     val sc = new SparkContext(sparkConf)
+    sc.setLogLevel("WARN")
 
     // load data
     val df = loadData(sc, args(0))
 
     // Very simple feature extraction from an invoice
     val featurized = featurizeData(df)
+    featurized.printSchema()
 
     // Filter not valid entries
     val filtered = filterData(featurized)
+    filtered.printSchema()
 
     // Transform in a dataset for MLlib
     val dataset = toDataset(filtered)
