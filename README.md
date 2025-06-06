@@ -1,10 +1,8 @@
----
-title: Invoice Anomaly Detection Pipeline (Spark Streaming)
-author: Javier Vela
-date: 2025-06-06
----
+# Invoice Anomaly Detection Pipeline (Spark Streaming)
 
 This project implements a real-time data processing pipeline using Apache Spark Streaming to detect anomalous invoices. The system leverages both **KMeans** and **BisectingKMeans** clustering algorithms as alternative anomaly detection strategies. The objective is to enable future comparative evaluation of their performance via **A/B testing**. Additionally, the pipeline identifies malformed invoices and monitors cancellation patterns over time.
+
+> This project is an assignment for the course "Big Data" at the Master in Artificial Intelligence Research at the Universidad Internacional Menéndez Pelayo (UIMP).
 
 ---
 
@@ -244,3 +242,16 @@ scripts/delete_kafka_topics.sh
 scripts/create_kafka_topics.sh
 ```
 
+---
+
+## Additional Information
+
+- Anomaly and error logs are stored in the `logs/` directory.
+- The input CSV must match the schema of `online_retail.csv`.
+- The data producer introduces randomized intervals between messages to mimic real-time ingestion.
+
+---
+
+## Acknowledgements
+
+This project was developed as a practical exercise in real-time anomaly detection using Apache Spark Streaming and Kafka. It emphasizes robust design principles, stateful stream processing, and future-oriented model evaluation through comparative analysis.
