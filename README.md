@@ -241,17 +241,3 @@ To reset all Kafka topics:
 scripts/delete_kafka_topics.sh
 scripts/create_kafka_topics.sh
 ```
-
----
-
-## Additional Information
-
-- Anomaly and error logs are stored in the `logs/` directory.
-- The input CSV must match the schema of `online_retail.csv`.
-- The data producer introduces randomized intervals between messages to mimic real-time ingestion.
-
----
-
-## Acknowledgements
-
-This project was developed as a practical exercise in real-time anomaly detection using Apache Spark Streaming and Kafka. It emphasizes robust design principles, stateful stream processing, and future-oriented model evaluation through comparative analysis.
